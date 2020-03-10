@@ -1,0 +1,17 @@
+﻿  正在验证源
+  正在将源远程复制到“192.168.144.133”
+  正在验证体系结构
+  正在验证体系结构
+  正在启动远程生成
+  正在编译源:
+  AOIWrold.cpp
+C:\Users\Administrator\Desktop\xm\Project3_GameTCP\AOIWrold.h(26,16): warning : ‘AOIWrold::m_X_end’ will be initialized after [-Wreorder]
+C:\Users\Administrator\Desktop\xm\Project3_GameTCP\AOIWrold.h(26,16): warning :   int m_X_end = 0;
+C:\Users\Administrator\Desktop\xm\Project3_GameTCP\AOIWrold.h(26,16): warning :                 ^
+C:\Users\Administrator\Desktop\xm\Project3_GameTCP\AOIWrold.h(25,18): warning : ‘int AOIWrold::m_Y_begin’ [-Wreorder]
+C:\Users\Administrator\Desktop\xm\Project3_GameTCP\AOIWrold.h(25,18): warning :   int m_Y_begin = 0;
+C:\Users\Administrator\Desktop\xm\Project3_GameTCP\AOIWrold.h(25,18): warning :                   ^
+C:\Users\Administrator\Desktop\xm\Project3_GameTCP\AOIWrold.cpp(3,1): warning : when initialized here [-Wreorder]
+  GameRole.cpp
+  正在链接对象
+  Project3_GameTCP.vcxproj -> C:\Users\Administrator\Desktop\xm\Project3_GameTCP\bin\x64\Debug\Project3_GameTCP.out
