@@ -2,6 +2,10 @@
 #include <zinx.h>
 #include"AOIWrold.h"
 #include"GameMsg.h"
+
+/*单局游戏所以玩家名称临时文件*/
+constexpr auto GAMEWROLD_FILENAME = "/tmp/gg_wroldGame_name";
+
 class GameProtocol;
 class GameRole :
 	public Irole, public Player

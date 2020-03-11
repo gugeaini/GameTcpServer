@@ -234,6 +234,17 @@ bool GameRole::Init()
 		TimerMngHandler::Getinstance().DelTask(&g_exit_Timer);
 	}
 
+
+	/*打印玩家上线消息到世界聊天窗*/
+	auto roleList = ZinxKernel::Zinx_GetAllRole();
+	string str = " 玩家上线了！";
+	for (auto single : roleList)
+	{
+		auto pMsg = CreateTalkBroadCast(str);
+		auto pRole = dynamic_cast<GameRole*>(single);
+		ZinxKernel::Zinx_SendOut(*pMsg, *(pRole->m_Protocol));
+	}
+
 	int bRet = false;
 	/*获取id*/
 	iPid = m_Protocol->m_Channel->GetFd();
@@ -258,8 +269,9 @@ bool GameRole::Init()
 	}
 
 	/*记录当前姓名到游戏世界文件	追加记录 ios::app*/
-	ofstream gg_wroldGame_name("/tmp/gg_wroldGame_name",ios::app);
+	ofstream gg_wroldGame_name(GAMEWROLD_FILENAME,ios::app);
 	gg_wroldGame_name << szName << endl;
+
 
 	return bRet;
 }
@@ -316,6 +328,40 @@ void GameRole::Fini()
 		/*启动定时器*/
 		TimerMngHandler::Getinstance().AddTask(&g_exit_Timer);
 	}
+
+	/*玩家退出，删除临时文件玩家名称*/
+	/*打开文件全部读出*/
+	ifstream input_wroldGame_name(GAMEWROLD_FILENAME);
+	list<string> cur_nameList;
+	string tmp;
+	/*循环读每一行数据*/
+	while (getline(input_wroldGame_name, tmp))
+	{
+		cur_nameList.push_back(tmp);
+	}
+	
+	/*写回去文件*/
+	ofstream output_wroldGame_name(GAMEWROLD_FILENAME);
+	for (auto single : cur_nameList)
+	{
+		/*把当前名字摘除*/
+		if (single != szName)
+		{
+			output_wroldGame_name << single << endl;
+		}
+	}
+
+
+	/*打印玩家下线消息到世界聊天窗*/
+	auto roleList = ZinxKernel::Zinx_GetAllRole();
+	string str = " 玩家下线了！";
+	for (auto single : roleList)
+	{
+		auto pMsg = CreateTalkBroadCast(str);
+		auto pRole = dynamic_cast<GameRole*>(single);
+		ZinxKernel::Zinx_SendOut(*pMsg, *(pRole->m_Protocol));
+	}
+
 }
 
 int GameRole::GetX()
