@@ -6,10 +6,29 @@
 #include"GameChannel.h"
 #include<algorithm>
 #include"RandomName.h"
+#include"ZinxTimer.h"
 
 RandomName random_name;
-
 using namespace std;
+/*定时器推出类*/
+class ExitTimer :
+	public TimerTask
+{
+	// 通过 TimerTask 继承
+	virtual void Proc() override
+	{
+		ZinxKernel::Zinx_Exit();
+	}
+	virtual int GetTimeSec() override
+	{
+		/*秒数*/
+		return 20;
+	}
+};
+static ExitTimer g_exit_Timer;	//全局定时退出单例
+
+
+
 /*创建游戏地图世界对象*/
 static AOIWrold wrold(0, 600, 0, 600, 30, 30);
 /*向自己发送ID和名字*/
@@ -208,6 +227,12 @@ GameRole::~GameRole()
 }
 bool GameRole::Init()
 {
+	/*当前玩家总数==0*/
+	if (ZinxKernel::Zinx_GetAllRole().size() <= 0)
+	{
+		TimerMngHandler::Getinstance().DelTask(&g_exit_Timer);
+	}
+
 	int bRet = false;
 	/*获取id*/
 	iPid = m_Protocol->m_Channel->GetFd();
@@ -281,9 +306,11 @@ void GameRole::Fini()
 
 	/*退出服务器程序*/
 	auto pRoleList = ZinxKernel::Zinx_GetAllRole();
+	/*当前玩家总数==1*/
 	if (pRoleList.size() <= 1)
 	{
-		
+		/*启动定时器*/
+		TimerMngHandler::Getinstance().AddTask(&g_exit_Timer);
 	}
 }
 

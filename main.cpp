@@ -5,6 +5,7 @@
 #include"AOIWrold.h"
 #include"GameRole.h"
 #include"RandomName.h"
+#include"ZinxTimer.h"
 
 extern RandomName random_name;
 using namespace std;
@@ -34,7 +35,7 @@ public:
 };
 #endif
 
-/*守护进程*/
+/*守护进程带 监控进程*/
 void Daemon()
 {
 	//1 fork
@@ -61,6 +62,33 @@ void Daemon()
 		dup2(fd, 1);
 		dup2(fd, 2);
 		close(fd);
+	}
+
+	/*进程监控*/
+	while (1)
+	{
+		pid_t childPid = fork();
+		if (childPid < 0)
+		{
+			exit(-1);
+		}
+
+		//父进程
+		if (childPid > 0)
+		{
+			int istatus;
+			wait(&istatus);
+			if (0 == istatus)
+			{
+				/*服务器正常退出*/
+				exit(0);
+			}
+		}
+		else
+		{
+			/*重启服务器*/
+			break;
+		}
 	}
 }
 
@@ -114,6 +142,8 @@ int main()
 	random_name.LoadFile();
 	/*初始化框架*/
 	ZinxKernel::ZinxKernelInit();
+	/*定时器通道*/
+	ZinxKernel::Zinx_Add_Channel(*(new ZinxTimerChannel()));
 	/*添加Tcp通道到框架*/
 	ZinxKernel::Zinx_Add_Channel(*(new ZinxTCPListen(8899, new GameConnFact())));
 
