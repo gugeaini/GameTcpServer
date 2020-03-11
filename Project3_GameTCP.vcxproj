@@ -86,6 +86,7 @@
     <ClCompile Include="GameRole.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="msg.pb.cpp" />
+    <ClCompile Include="RandomName.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="AOIWrold.h" />
@@ -94,6 +95,7 @@
     <ClInclude Include="GameProtocol.h" />
     <ClInclude Include="GameRole.h" />
     <ClInclude Include="msg.pb.h" />
+    <ClInclude Include="RandomName.h" />
   </ItemGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <Link>

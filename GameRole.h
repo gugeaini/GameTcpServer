@@ -20,6 +20,18 @@ class GameRole :
 	GameMsg* CreateSelfPosion();
 	/*向周围玩家发送下线消息*/
 	GameMsg* CreateIDNameLogoff();
+	/*向所有人发送聊天消息*/
+	GameMsg* CreateTalkBroadCast(string _content);
+
+	/*1.处理聊天消息*/
+	void ProcTalkMsg(string content);
+	
+	/*2.处理新位置*/
+	void ProcMoveMsg(int _x, int _y, int _z, int _v);
+	/*2.1视野出现*/
+	void ViewAppear(GameRole* _pRole);
+	/*2.2视野消失*/
+	void ViewLost(GameRole* _pRole);
 public:
 	GameRole();
 	virtual ~GameRole();

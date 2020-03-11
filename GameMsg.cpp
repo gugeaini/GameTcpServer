@@ -5,7 +5,8 @@ GameMsg::GameMsg(MSG_TYPE _type, google::protobuf::Message* _pMsg)
 {
 }
 
-GameMsg::GameMsg(MSG_TYPE _type, string _stream)
+GameMsg::GameMsg(MSG_TYPE _type, string _stream):
+    enMsgType(_type)
 {
     /*通过简单工厂构造具体的消息对象*/
 
@@ -47,4 +48,17 @@ string GameMsg::serilize()
 
 GameMsg::~GameMsg()
 {
+    delete pMsg;
+}
+
+MultiMsg::MultiMsg()
+{
+}
+
+MultiMsg::~MultiMsg()
+{
+    for (auto &single : m_Msgs)
+    {
+        delete single;
+    }
 }

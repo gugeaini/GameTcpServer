@@ -3,6 +3,10 @@
 #include"GameMsg.h"
 #include"msg.pb.h"
 #include"AOIWrold.h"
+#include"GameRole.h"
+#include"RandomName.h"
+
+extern RandomName random_name;
 using namespace std;
 
 class myPlayer :
@@ -51,7 +55,9 @@ int main()
 	cout << dynamic_cast<pb::SyncPid*>(qq.pMsg)->username() << endl;
 #endif
 
-	AOIWrold w(20, 200, 50, 230, 6, 6);
+	AOIWrold w(0, 400, 0, 400, 20, 20);
+//游戏添加测试代码
+#if 0
 	
 	myPlayer p1(60, 107,"1");
 	myPlayer p2(93, 112,"2");
@@ -66,7 +72,9 @@ int main()
 		dynamic_cast<myPlayer*>(signle);
 		std::cout << dynamic_cast<myPlayer*>(signle)->name << std::endl;
 	}
+#endif
 
+	random_name.LoadFile();
 	/*初始化框架*/
 	ZinxKernel::ZinxKernelInit();
 	/*添加Tcp通道到框架*/
