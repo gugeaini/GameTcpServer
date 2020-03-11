@@ -9,6 +9,10 @@
 extern RandomName random_name;
 using namespace std;
 
+
+
+//测试游戏类
+#if 0
 class myPlayer :
 	public Player
 {
@@ -28,9 +32,42 @@ public:
 		return y;
 	}
 };
+#endif
+
+/*守护进程*/
+void Daemon()
+{
+	//1 fork
+	pid_t pid = fork();
+	if (0 > pid)
+	{
+		//失败
+		exit(-1);
+	}
+	//2 杀死父进程
+	if (0 < pid)
+	{
+		exit(0);
+	}
+	//3	设置会话
+	setsid();
+	//4 修改工作目录
+	//chdir(getenv("HOME"));//切换到家目录
+	//5 重定向文件描述符
+	int fd = open("null.guge",O_RDWR|O_CREAT,0666);
+	if (fd > 0)
+	{
+		dup2(fd, 0);
+		dup2(fd, 1);
+		dup2(fd, 2);
+		close(fd);
+	}
+}
 
 int main()
 {
+	Daemon();
+
 //Tcp通道层测试代码
 #if 0
 
@@ -55,10 +92,10 @@ int main()
 	cout << dynamic_cast<pb::SyncPid*>(qq.pMsg)->username() << endl;
 #endif
 
-	AOIWrold w(0, 400, 0, 400, 20, 20);
 //游戏添加测试代码
 #if 0
 	
+	AOIWrold w(0, 400, 0, 400, 20, 20);
 	myPlayer p1(60, 107,"1");
 	myPlayer p2(93, 112,"2");
 	myPlayer p3(148, 134,"3");

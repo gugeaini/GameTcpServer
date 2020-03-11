@@ -90,7 +90,7 @@ GameMsg* GameRole::CreateTalkBroadCast(string _content)
 	pMsg->set_tp(1);
 	pMsg->set_content(_content);
 
-	auto pRet = new GameMsg(GameMsg::MSG_TYPE_BROADCAST, pMsg);
+	GameMsg* pRet = new GameMsg(GameMsg::MSG_TYPE_BROADCAST, pMsg);
 
 	return pRet;
 }
@@ -252,8 +252,10 @@ UserData* GameRole::ProcMsg(UserData& _poUserData)
 		{
 		case GameMsg::MSG_TYPE_CHAT_CONTENT:
 			ProcTalkMsg(dynamic_cast<pb::Talk*>(_pMsg->pMsg)->content());
+			break;
 		case GameMsg::MSG_TYPE_NEW_POSITION:
 			ProcMoveMsg(NewPos->x(), NewPos->y(), NewPos->z(), NewPos->v());
+			break;
 		default:
 			break;
 		}
