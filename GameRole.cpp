@@ -7,6 +7,7 @@
 #include<algorithm>
 #include"RandomName.h"
 #include"ZinxTimer.h"
+#include<fstream>
 
 RandomName random_name;
 using namespace std;
@@ -227,7 +228,7 @@ GameRole::~GameRole()
 }
 bool GameRole::Init()
 {
-	/*当前玩家总数==0*/
+	/*当前玩家总数==0 关闭定时器*/
 	if (ZinxKernel::Zinx_GetAllRole().size() <= 0)
 	{
 		TimerMngHandler::Getinstance().DelTask(&g_exit_Timer);
@@ -238,7 +239,6 @@ bool GameRole::Init()
 	iPid = m_Protocol->m_Channel->GetFd();
 	/*添加自己到世界*/
 	bRet = wrold.AddPlayer(this);
-
 	if (true == bRet)
 	{
 		/*向自己发送ID和名字*/
@@ -256,6 +256,10 @@ bool GameRole::Init()
 			ZinxKernel::Zinx_SendOut(*pMsg, *(pRole->m_Protocol));
 		}
 	}
+
+	/*记录当前姓名到游戏世界文件	追加记录 ios::app*/
+	ofstream gg_wroldGame_name("/tmp/gg_wroldGame_name",ios::app);
+	gg_wroldGame_name << szName << endl;
 
 	return bRet;
 }
