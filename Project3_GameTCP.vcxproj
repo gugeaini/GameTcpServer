@@ -101,7 +101,7 @@
   </ItemGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <Link>
-      <LibraryDependencies>zinx;pthread;protobuf</LibraryDependencies>
+      <LibraryDependencies>zinx;pthread;protobuf;hiredis</LibraryDependencies>
     </Link>
     <ClCompile>
       <AdditionalOptions>-pthread</AdditionalOptions>

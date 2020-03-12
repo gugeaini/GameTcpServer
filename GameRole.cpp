@@ -8,6 +8,7 @@
 #include"RandomName.h"
 #include"ZinxTimer.h"
 #include<fstream>
+#include<hiredis/hiredis.h>
 
 RandomName random_name;
 using namespace std;
@@ -268,10 +269,20 @@ bool GameRole::Init()
 		}
 	}
 
+//存放当前游戏世界玩家缓冲区
+#if 0
 	/*记录当前姓名到游戏世界文件	追加记录 ios::app*/
 	ofstream gg_wroldGame_name(GAMEWROLD_FILENAME,ios::app);
 	gg_wroldGame_name << szName << endl;
-
+#else
+	/*使用redis数据库存储临时文件*/
+	redisContext* rc = redisConnect("127.0.0.1", 6379);
+	if (NULL != rc)
+	{
+		freeReplyObject(redisCommand(rc, "lpush gg_wroldGame_name %s", szName.data()));
+		redisFree(rc);
+	}
+#endif
 
 	return bRet;
 }
@@ -329,7 +340,10 @@ void GameRole::Fini()
 		TimerMngHandler::Getinstance().AddTask(&g_exit_Timer);
 	}
 
+
 	/*玩家退出，删除临时文件玩家名称*/
+#if 0
+	
 	/*打开文件全部读出*/
 	ifstream input_wroldGame_name(GAMEWROLD_FILENAME);
 	list<string> cur_nameList;
@@ -350,6 +364,16 @@ void GameRole::Fini()
 			output_wroldGame_name << single << endl;
 		}
 	}
+#else
+	redisContext* rc = redisConnect("127.0.0.1", 6379);
+	if (NULL != rc)
+	{
+		
+		freeReplyObject(redisCommand(rc, "lrem gg_wroldGame_name 1 %s", szName.data()));
+		redisFree(rc);
+	}
+
+#endif
 
 
 	/*打印玩家下线消息到世界聊天窗*/
